@@ -19,6 +19,8 @@ ProjectSection(SolutionItems) = preProject
 	Packages.props = Packages.props
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Process", "Process\Process.csproj", "{207F35A0-575A-4FD5-98E9-1B1CD7B15044}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,19 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|x64.Build.0 = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Debug|x86.Build.0 = Debug|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|x64.ActiveCfg = Release|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|x64.Build.0 = Release|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|x86.ActiveCfg = Release|Any CPU
+		{207F35A0-575A-4FD5-98E9-1B1CD7B15044}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 	<ItemGroup Label="Runtime Dependencies">
+		<PackageReference Update="Funcky" Version="[2.2.0, 3)" />
+		<PackageReference Update="System.Collections.Immutable" Version="[1.7.1, 2)" />
 	</ItemGroup>
 	<ItemGroup Label="Build Dependencies">
 		<PackageReference Update="Messerli.CodeStyle" Version="1.2.1" />
