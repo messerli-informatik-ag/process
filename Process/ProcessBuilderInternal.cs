@@ -66,7 +66,6 @@ namespace Messerli.Process
         /// <summary>
         /// Starts the process.
         /// </summary>
-        /// <returns></returns>
         public System.Diagnostics.Process Run()
             => System.Diagnostics.Process.Start(CreateProcessStartInfo())!;
 

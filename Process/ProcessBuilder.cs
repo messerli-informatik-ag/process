@@ -5,6 +5,8 @@ namespace Messerli.Process
 {
     public static class ProcessBuilder
     {
+        private static readonly string FallbackDotnetExecutable = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet.exe" : "dotnet";
+
         /// <summary>
         /// A <see cref="IProcessBuilder"/> for the <c>dotnet</c> executable.
         /// </summary>
@@ -12,8 +14,6 @@ namespace Messerli.Process
         public static IProcessBuilder Dotnet => new ProcessBuilderInternal(DotnetExecutable);
 
         private static string DotnetExecutable => Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? FallbackDotnetExecutable;
-
-        private static readonly string FallbackDotnetExecutable = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet.exe" : "dotnet";
 
         /// <summary>
         /// Creates a new <see cref="IProcessBuilder"/> for the provided program.

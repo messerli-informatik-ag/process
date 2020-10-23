@@ -23,7 +23,6 @@ namespace Messerli.Process
         /// <summary>
         /// Starts the process.
         /// </summary>
-        /// <returns></returns>
         System.Diagnostics.Process Run();
 
         /// <summary>
