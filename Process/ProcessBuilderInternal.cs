@@ -63,28 +63,15 @@ namespace Messerli.Process
         public IProcessBuilder RedirectOutputs(bool redirect = true)
             => RedirectStandardError(redirect).RedirectStandardOutput(redirect);
 
-        /// <summary>
-        /// Starts the process.
-        /// </summary>
         public System.Diagnostics.Process Run()
             => System.Diagnostics.Process.Start(CreateProcessStartInfo())!;
 
-        /// <summary>
-        /// Runs and waits for the process to exit.
-        /// </summary>
         public void RunAndWait(Option<IOutputForwarder> forwarder = default)
             => RunAndWait(forwarder, NoOperation);
 
-        /// <summary>
-        /// Runs and waits for the process to exit.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when the process exits with a non-zero exit code.</exception>
         public void RunAndWaitForSuccess(Option<IOutputForwarder> forwarder = default)
             => RunAndWait(forwarder, ValidateExitCode);
 
-        /// <summary>
-        /// Runs the process and returns its standard output.
-        /// </summary>
         public string RunAndReturnOutput()
         {
             using var process = RedirectStandardOutput().Run();
