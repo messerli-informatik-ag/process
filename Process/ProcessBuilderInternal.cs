@@ -89,9 +89,10 @@ namespace Messerli.Process
         public override string ToString()
             => $"{_program} {string.Join(" ", _arguments)}";
 
-        private void RunAndWait(Option<IOutputForwarder> forwarder, Action<System.Diagnostics.Process> onExited)
+        private void RunAndWait(Option<IOutputForwarder> forwarderOverride, Action<System.Diagnostics.Process> onExited)
         {
-            using var process = forwarder.OrElse(_outputForwarder).Match(none: false, some: True)
+            var forwarder = forwarderOverride.OrElse(_outputForwarder);
+            using var process = forwarder.Match(none: false, some: True)
                 ? RedirectOutputs().Run()
                 : Run();
 
