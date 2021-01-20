@@ -16,6 +16,7 @@ namespace Messerli.Process
         private readonly Option<string> _workingDirectory;
         private readonly Option<bool> _redirectStandardOutput;
         private readonly Option<bool> _redirectStandardError;
+        private readonly Option<IOutputForwarder> _outputForwarder;
 
         public ProcessBuilderInternal(string program)
         {
@@ -27,13 +28,15 @@ namespace Messerli.Process
             IImmutableList<string> arguments,
             Option<string> workingDirectory,
             Option<bool> redirectStandardOutput,
-            Option<bool> redirectStandardError)
+            Option<bool> redirectStandardError,
+            Option<IOutputForwarder> outputForwarder)
         {
             _program = program;
             _arguments = arguments;
             _workingDirectory = workingDirectory;
             _redirectStandardOutput = redirectStandardOutput;
             _redirectStandardError = redirectStandardError;
+            _outputForwarder = outputForwarder;
         }
 
         [Pure]
@@ -63,6 +66,9 @@ namespace Messerli.Process
         public IProcessBuilder RedirectOutputs(bool redirect = true)
             => RedirectStandardError(redirect).RedirectStandardOutput(redirect);
 
+        public IProcessBuilder OutputForwarder(IOutputForwarder outputForwarder)
+            => ShallowClone(outputForwarder: Option.Some(outputForwarder));
+
         public System.Diagnostics.Process Run()
             => System.Diagnostics.Process.Start(CreateProcessStartInfo())!;
 
@@ -85,7 +91,7 @@ namespace Messerli.Process
 
         private void RunAndWait(Option<IOutputForwarder> forwarder, Action<System.Diagnostics.Process> onExited)
         {
-            using var process = forwarder.Match(none: false, some: True)
+            using var process = forwarder.OrElse(_outputForwarder).Match(none: false, some: True)
                 ? RedirectOutputs().Run()
                 : Run();
 
@@ -112,18 +118,11 @@ namespace Messerli.Process
 
         private static void ForwardOutput(System.Diagnostics.Process process, IOutputForwarder forwarder)
         {
-            while (!process.StandardOutput.EndOfStream || !process.StandardError.EndOfStream)
-            {
-                if (process.StandardOutput.ReadLine() is { } standardOutputLine)
-                {
-                    forwarder.WriteOutputLine(standardOutputLine);
-                }
+            process.OutputDataReceived += (_, data) => forwarder.WriteOutputLine(data.Data);
+            process.ErrorDataReceived += (_, data) => forwarder.WriteErrorLine(data.Data);
 
-                if (process.StandardError.ReadLine() is { } standardErrorLine)
-                {
-                    forwarder.WriteErrorLine(standardErrorLine);
-                }
-            }
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
         }
 
         private void ValidateExitCode(System.Diagnostics.Process process)
@@ -138,12 +137,14 @@ namespace Messerli.Process
             Option<IImmutableList<string>> arguments = default,
             Option<string> workingDirectory = default,
             Option<bool> redirectStandardOutput = default,
-            Option<bool> redirectStandardError = default)
+            Option<bool> redirectStandardError = default,
+            Option<IOutputForwarder> outputForwarder = default)
             => new ProcessBuilderInternal(
                 program: _program,
                 arguments: arguments.GetOrElse(_arguments),
                 workingDirectory: workingDirectory.OrElse(_workingDirectory),
                 redirectStandardOutput: redirectStandardOutput.OrElse(_redirectStandardOutput),
-                redirectStandardError: redirectStandardError.OrElse(_redirectStandardError));
+                redirectStandardError: redirectStandardError.OrElse(_redirectStandardError),
+                outputForwarder: outputForwarder.OrElse(_outputForwarder));
     }
 }
