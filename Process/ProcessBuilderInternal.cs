@@ -118,18 +118,11 @@ namespace Messerli.Process
 
         private static void ForwardOutput(System.Diagnostics.Process process, IOutputForwarder forwarder)
         {
-            while (!process.StandardOutput.EndOfStream || !process.StandardError.EndOfStream)
-            {
-                if (process.StandardOutput.ReadLine() is { } standardOutputLine)
-                {
-                    forwarder.WriteOutputLine(standardOutputLine);
-                }
+            process.OutputDataReceived += (_, data) => forwarder.WriteOutputLine(data.Data);
+            process.ErrorDataReceived += (_, data) => forwarder.WriteErrorLine(data.Data);
 
-                if (process.StandardError.ReadLine() is { } standardErrorLine)
-                {
-                    forwarder.WriteErrorLine(standardErrorLine);
-                }
-            }
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
         }
 
         private void ValidateExitCode(System.Diagnostics.Process process)
