@@ -21,6 +21,11 @@ namespace Messerli.Process
         IProcessBuilder RedirectOutputs(bool redirect = true);
 
         /// <summary>
+        /// Configures an output forwarder for <see cref="RunAndWaitForSuccess"/> and <see cref="RunAndWait"/>.
+        /// </summary>
+        IProcessBuilder OutputForwarder(IOutputForwarder outputForwarder);
+
+        /// <summary>
         /// Starts the process.
         /// </summary>
         System.Diagnostics.Process Run();
@@ -28,11 +33,13 @@ namespace Messerli.Process
         /// <summary>
         /// Runs and waits for the process to exit.
         /// </summary>
+        /// <param name="forwarder">An output forwarder to use instead of the one configured by <see cref="OutputForwarder"/>.</param>
         void RunAndWait(Option<IOutputForwarder> forwarder = default);
 
         /// <summary>
         /// Runs and waits for the process to exit.
         /// </summary>
+        /// <param name="forwarder">An output forwarder to use instead of the one configured by <see cref="OutputForwarder"/>.</param>
         /// <exception cref="InvalidOperationException">Thrown when the process exits with a non-zero exit code.</exception>
         void RunAndWaitForSuccess(Option<IOutputForwarder> forwarder = default);
 
